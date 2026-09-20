@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AlertTriangle, Bell, CalendarDays, Check, CheckCircle2, Clock3, LogOut, Plus, Sparkles, Trash2, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -31,6 +32,7 @@ function remaining(iso: string) {
 
 export default function Dashboard() {
   const supabase = createClient();
+  const router = useRouter();
   const [deadlines, setDeadlines] = useState<Deadline[]>([]);
   const [modal, setModal] = useState(false);
   const [capture, setCapture] = useState("");
@@ -43,7 +45,7 @@ export default function Dashboard() {
   async function load() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
-      window.location.href = "/auth";
+      router.push("/auth");
       return;
     }
     setUserEmail(user.email ?? "");
@@ -90,7 +92,7 @@ export default function Dashboard() {
 
   async function signOut() {
     await supabase.auth.signOut();
-    window.location.href = "/";
+    router.push("/");
   }
 
   if (loading) return <main className="min-h-screen grid place-items-center text-zinc-500">Loading your deadlines…</main>;
