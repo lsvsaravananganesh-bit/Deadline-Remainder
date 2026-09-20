@@ -1,11 +1,13 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Bell, Loader2, ShieldCheck } from "lucide-react";
 
 export default function AuthPage() {
   const supabase = createClient();
+  const router = useRouter();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,7 +37,7 @@ export default function AuthPage() {
       return;
     }
 
-    window.location.href = "/dashboard";
+    router.push("/dashboard");
   }
 
   return (
